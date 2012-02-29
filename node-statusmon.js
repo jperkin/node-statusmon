@@ -13,7 +13,7 @@ function load_module(path)
 
   for (var m in mod.probes) {
     if (m in probes) {
-      console.log("WARNING: " + path + " attempting to override " + m + ", ignoring");
+      console.log('WARNING: ' + path + ' attempting to override ' + m + ', ignoring');
     } else {
       probes[m] = mod.probes[m];
     }
@@ -36,7 +36,7 @@ function update_stats(data)
   for (var v in data) {
     switch (config.output_format) {
     case 'graphite':
-      console.log([[os.hostname(), v].join("."), data[v], timenow].join(" "));
+      console.log([[os.hostname(), v].join('.'), data[v], timenow].join(' '));
       break;
     case 'rrd-simple':
       /*
@@ -46,7 +46,26 @@ function update_stats(data)
        */
       var off = timenow % 60;
       timenow = (off <= 30) ? timenow - off : timenow + (60 - off);
-      console.log([[timenow, v].join("."), data[v]].join(" "));
+      /*
+       * POST data
+       */
+      var data = [[timenow, v].join('.'), data[v]].join(' ');
+      var http = require('http');
+      var opts = {
+        host: config.rrdsimple.host,
+        port: config.rrdsimple.port,
+        path: config.rrdsimple.path,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Length': data.length
+        }
+      }
+      console.log('[' + new Date().toISOString() + '] ' +
+                  [timenow, v].join('.') + ' -> ' + opts['host']);
+      var req = http.request(opts, function (res) {
+        // We currently fire-and-forget..
+      }).write(data);
       break;
     }
   }
