@@ -51,8 +51,31 @@ function get_uptime(callback)
   });
 }
 
+function get_users(callback)
+{
+  exec('who', function (err, stdout, stderr) {
+    var ret = {
+      'system.users.total': 0,
+      'system.users.unique': 0,
+    };
+    var seen = [];
+    stdout.split('\n').forEach(function (line) {
+      if (line === '')
+        return;
+      ret['system.users.total'] += 1;
+      var user = line.split(/\s+/)[0];
+      if (seen.indexOf(user) == -1) {
+        seen.push(user);
+        ret['system.users.unique'] += 1;
+      }
+    }, ret);
+    callback(ret);
+  });
+}
+
 module.exports.probes = {
   'system.mpstat': get_mpstat,
   'system.loadavg': get_loadavg,
   'system.uptime': get_uptime,
+  'system.users': get_users,
 }
