@@ -1,7 +1,7 @@
 var config = {}
 
-// This both configures which pollers to run, and their frequency.
-config.pollers = [
+// This both configures which probes to run, and their frequency.
+config.probes = [
   ["system.uptime",         "300"],
   [/.*/,                     "60"],
 ]

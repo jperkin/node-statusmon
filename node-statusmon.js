@@ -5,17 +5,17 @@ var os = require('os');
 
 var config = require('./config');
 
-var pollers = {};
+var probes = {};
 
 function load_module(path)
 {
   var mod = require(path);
 
-  for (var m in mod.pollers) {
-    if (m in pollers) {
+  for (var m in mod.probes) {
+    if (m in probes) {
       console.log("WARNING: " + path + " attempting to override " + m + ", ignoring");
     } else {
-      pollers[m] = mod.pollers[m];
+      probes[m] = mod.probes[m];
     }
   }
 }
@@ -27,7 +27,7 @@ fs.readdirSync('./lib').forEach(function(file) {
 });
 
 /*
- * The callback function applied to each poller, its responsibility is to
+ * The callback function applied to each probe, its responsibility is to
  * return the results back to the appropriate collection system.
  */
 function update_stats(data)
@@ -53,9 +53,9 @@ function update_stats(data)
 }
 
 /*
- * Perform an initial poll, then repeat with the interval specified.
+ * Perform an initial probe, then repeat with the interval specified.
  */
-function start_poller(func, interval)
+function start_probe(func, interval)
 {
   func(update_stats);
   setInterval(function() {
@@ -65,27 +65,27 @@ function start_poller(func, interval)
 
 var registered = [];
 
-config.pollers.forEach(function(poll) {
+config.probes.forEach(function(probe) {
 
-  var pollname = poll[0];
-  var pollint = poll[1];
+  var probename = probe[0];
+  var probeint = probe[1];
 
-  if (typeof(pollname) === 'string' && pollname in pollers) {
-    if (registered.indexOf(pollname) !== -1) {
+  if (typeof(probename) === 'string' && probename in probes) {
+    if (registered.indexOf(probename) !== -1) {
       return;
     }
-    registered.push(pollname);
-    start_poller(pollers[pollname], pollint);
+    registered.push(probename);
+    start_probe(probes[probename], probeint);
     return;
   } 
-  else if (pollname instanceof RegExp) {
-    for (var c in pollers) {
+  else if (probename instanceof RegExp) {
+    for (var c in probes) {
       if (registered.indexOf(c.toString()) !== -1) {
         continue;
       }
-      if (c.toString().match(pollname)) {
+      if (c.toString().match(probename)) {
         registered.push(c.toString());
-        start_poller(pollers[c], pollint);
+        start_probe(probes[c], probeint);
       }
     }
   }
