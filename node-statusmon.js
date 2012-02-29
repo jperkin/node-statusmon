@@ -3,7 +3,19 @@
 var fs = require('fs');
 var os = require('os');
 
-var config = require('./config');
+/*
+ * If we're given an argument, assume for now it is a config file and load
+ * it instead of the default.
+ */
+if (process.argv[2]) {
+  if (process.argv[2].match(/^[.\/]/)) {
+    var config = require(process.argv[2]);
+  } else {
+    var config = require('./' + process.argv[2]);
+  }
+} else {
+  var config = require('./config');
+}
 
 var probes = {};
 
