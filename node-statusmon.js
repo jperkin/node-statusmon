@@ -81,7 +81,7 @@ config.pollers.forEach(function(poll) {
   else if (pollname instanceof RegExp) {
     for (var c in pollers) {
       if (registered.indexOf(c.toString()) !== -1) {
-        return;
+        continue;
       }
       if (c.toString().match(pollname)) {
         registered.push(c.toString());
