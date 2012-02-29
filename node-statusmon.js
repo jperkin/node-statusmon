@@ -35,6 +35,9 @@ function update_stats(data)
   var timenow = parseInt(new Date().getTime() / 1000);
   for (var v in data) {
     switch (config.output_format) {
+    case 'console':
+      console.log([[os.hostname(), v].join('.'), data[v], timenow].join(' '));
+      break;
     case 'graphite':
       console.log([[os.hostname(), v].join('.'), data[v], timenow].join(' '));
       break;

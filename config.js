@@ -6,8 +6,8 @@ config.probes = [
   [/.*/,                     '60'],
 ]
 
-// Possible options: ['rrd-simple', 'graphite']
-config.output_format = 'rrd-simple';
+// Possible options: ['console', 'graphite', 'rrd-simple']
+config.output_format = 'console';
 
 config.rrdsimple = {};
 config.rrdsimple.host = 'rrd.me.uk';
