@@ -10,6 +10,39 @@ frequently at high frequency, e.g. for cpu utilisation, adsl noise margin etc.,
 while running others which are much more stable at a much lower frequency, e.g.
 uptime, logged-in users, etc.
 
+## How To Write Probes
+
+Writing probes is hopefully very simple.  Here's an example from `system.js` to
+get the current load average:
+
+```javascript
+var os = require('os');
+
+/*
+ * Probes take a callback argument of the function which updates the
+ * statistics.  The callback takes an argument containing the key/value
+ * pairs to store in the database.
+ */
+function get_loadavg(callback)
+{
+  var vals = os.loadavg();
+  callback({
+    'system.loadavg.1min': vals[0],
+    'system.loadavg.5mins': vals[1],
+    'system.loadavg.15mins': vals[2]
+  });
+}
+
+/*
+ * Export back each probe you want to register.
+ */
+module.exports.probes = {
+  'system.loadavg': get_loadavg,
+}
+```
+
+Dump that into a file in `lib/` and it will be automatically registered.
+
 ## Status
 
 Currently very bare-bones, general framework is in place, and modules can be
