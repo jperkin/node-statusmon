@@ -20,9 +20,9 @@ function load_module(path)
   }
 }
 
-fs.readdirSync('./lib').forEach(function(file) {
+fs.readdirSync('./probes').forEach(function(file) {
   if (file.match(/\.js$/)) {
-    load_module('./lib/' + file);
+    load_module('./probes/' + file);
   }
 });
 

@@ -41,12 +41,12 @@ module.exports.probes = {
 }
 ```
 
-Dump that into a file in `lib/` and it will be automatically registered.
+Dump that into a file in `probes/` and it will be automatically registered.
 
 ## Status
 
 Currently very bare-bones, general framework is in place, and modules can be
-put into ./lib and automatically loaded.
+put into `probes/` and automatically loaded.
 
 A basic system provider, including cpu utilisation, load average, and uptime is
 included.
