@@ -28,6 +28,25 @@ function get_disk_io(callback)
   }
 }
 
+function get_disk_temperature(callback)
+{
+  switch (process.platform) {
+  case 'linux':
+    var ret = {};
+    exec('hddtemp -wq -u C /dev/hd? /dev/sd?', function (err, stdout, stderr) {
+      stdout.split('\n').forEach(function (line) {
+        if (!line)
+          return;
+        var vals = line.replace(/.dev.(.d.):.*: (\d+).*/, "$1 $2").split(/\s+/);
+        ret['disk.temperature.' + vals[0]] = vals[1];
+      }, ret);
+      callback(ret);
+    });
+    break;
+  }
+}
+
 module.exports.probes = {
-  'disk.io': get_disk_io,
+  'disk.io':          get_disk_io,
+  'disk.temperature': get_disk_temperature,
 }
