@@ -10,6 +10,34 @@ frequently at high frequency, e.g. for cpu utilisation, adsl noise margin etc.,
 while running others which are much more stable at a much lower frequency, e.g.
 uptime, logged-in users, etc.
 
+## Install
+
+node-statusmon is now published on [npm](http://www.npmjs.org/) so it is super
+easy to install and run:
+
+    npm install statusmon
+    statusmon
+
+Or you can grab the latest from the repository:
+
+    git clone git://github.com/jperkin/node-statusmon.git
+
+And then either run it directly:
+
+    cd node-statusmon
+    ./statusmon.js
+
+Or install it:
+
+    cd node-statusmon
+    npm link
+    statusmon
+
+If you want a custom configuration, copy the default and pass it on the command
+line as the first argument, for example:
+
+    statusmon customconfig.js
+
 ## How To Write Probes
 
 Writing probes is hopefully very simple.  Here's an example from `system.js` to

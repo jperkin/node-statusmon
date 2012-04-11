@@ -21,7 +21,7 @@ var probes = {};
 
 function load_module(path)
 {
-  var mod = require(path);
+  var mod = require('./probes/' + path);
 
   for (var m in mod.probes) {
     if (m in probes) {
@@ -32,9 +32,11 @@ function load_module(path)
   }
 }
 
-fs.readdirSync('./probes').forEach(function(file) {
-  if (file.match(/\.js$/)) {
-    load_module('./probes/' + file);
+config.modules.forEach(function(mod) {
+  if (mod.match(/\.js$/)) {
+    load_module(mod);
+  } else {
+    load_module(mod + '.js');
   }
 });
 

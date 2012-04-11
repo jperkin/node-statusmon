@@ -1,6 +1,11 @@
 var config = {}
 
 /*
+ * Modules to load
+ */
+config.modules = ['cpu', 'disk', 'net', 'proc', 'system'];
+
+/*
  * Configure probes to run, and their frequency in seconds.
  *
  * Note that for RRD::Simple output you should match the frquency to the

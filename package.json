@@ -1,0 +1,20 @@
+{
+  "name": "statusmon",
+  "description": "Status monitoring framework",
+  "tags": ["monitoring", "util", "utility"],
+  "version": "0.0.0b",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jperkin/node-statusmon.git",
+  },
+  "bugs": {
+    "url": "https://github.com/jperkin/node-statusmon/issues",
+  },
+  "author": "Jonathan Perkin <jonathan@perkin.org.uk> (http://www.perkin.org.uk/)",
+  "bin": {
+    "statusmon": "./statusmon.js",
+  },
+  "engines": {
+    "node": "*",
+  }
+}
