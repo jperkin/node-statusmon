@@ -15,28 +15,38 @@ uptime, logged-in users, etc.
 node-statusmon is now published on [npm](http://www.npmjs.org/) so it is super
 easy to install and run:
 
-    npm install statusmon
-    statusmon
+```bash
+npm install statusmon
+statusmon
+```
 
 Or you can grab the latest from the repository:
 
-    git clone git://github.com/jperkin/node-statusmon.git
+```bash
+git clone git://github.com/jperkin/node-statusmon.git
+```
 
 And then either run it directly:
 
-    cd node-statusmon
-    ./statusmon.js
+```bash
+cd node-statusmon
+./statusmon.js
+```
 
 Or install it:
 
-    cd node-statusmon
-    npm link
-    statusmon
+```bash
+cd node-statusmon
+npm link
+statusmon
+```
 
 If you want a custom configuration, copy the default and pass it on the command
 line as the first argument, for example:
 
-    statusmon customconfig.js
+```bash
+statusmon customconfig.js
+```
 
 ## How To Write Probes
 
