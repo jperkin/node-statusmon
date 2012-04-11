@@ -25,6 +25,33 @@ function get_disk_io(callback)
       callback(ret);
     });
     break;
+  case 'sunos':
+    var ret = {};
+    var seen = 0;
+    exec('iostat -xnr 1 2', function (err, stdout, stderr) {
+      stdout.replace(/\n$/, '').split('\n').forEach(function (line) {
+        /* Ignore 4 header lines before matching */
+        if (!line.match(/^\d/)) {
+          seen += 1;
+          return;
+        }
+        if (seen != 4)
+          return;
+        var vals = line.split(',');
+        ret['disk.io.' + vals[10] + '.read.reqpersec'] = vals[0];
+        ret['disk.io.' + vals[10] + '.write.reqpersec'] = vals[1];
+        ret['disk.io.' + vals[10] + '.read.kbpersec'] = vals[2];
+        ret['disk.io.' + vals[10] + '.write.kbpersec'] = vals[3];
+        ret['disk.io.' + vals[10] + '.transactions.waiting'] = vals[4];
+        ret['disk.io.' + vals[10] + '.transactions.active'] = vals[5];
+        ret['disk.io.' + vals[10] + '.transactions.waittime'] = vals[6];
+        ret['disk.io.' + vals[10] + '.transactions.activetime'] = vals[7];
+        ret['disk.io.' + vals[10] + '.percentwait'] = vals[8];
+        ret['disk.io.' + vals[10] + '.utilization'] = vals[9];
+      }, ret);
+      callback(ret);
+    });
+    break;
   }
 }
 

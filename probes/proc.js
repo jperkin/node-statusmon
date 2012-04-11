@@ -8,6 +8,7 @@ function get_proc_count(callback)
 {
   switch (process.platform) {
   case 'linux':
+  case 'sunos':
     exec('ps -eo pid,nlwp', function (err, stdout, stderr) {
       var ret = {
         'proc.count.procs': 0,
@@ -53,6 +54,33 @@ function get_proc_state(callback)
         'proc.state.stopped': 0,
         'proc.state.paging': 0,
         'proc.state.dead': 0,
+        'proc.state.zombie': 0,
+      };
+      stdout.split('\n').forEach(function (state) {
+        if (state in map) {
+          ret["proc.state." + map[state]] += 1;
+        }
+      }, ret);
+      callback(ret);
+    });
+    break;
+  /* Pretty much identical to Linux but the flags are slightly different. */
+  case 'sunos':
+    exec('ps -eo s', function (err, stdout, stderr) {
+      var map = {
+        'O': 'oncpu',
+        'R': 'runnable',
+        'S': 'sleeping',
+        'T': 'stopped',
+        'W': 'waiting',
+        'Z': 'zombie',
+      }
+      var ret = {
+        'proc.state.oncpu': 0,
+        'proc.state.runnable': 0,
+        'proc.state.sleeping': 0,
+        'proc.state.stopped': 0,
+        'proc.state.waiting': 0,
         'proc.state.zombie': 0,
       };
       stdout.split('\n').forEach(function (state) {
